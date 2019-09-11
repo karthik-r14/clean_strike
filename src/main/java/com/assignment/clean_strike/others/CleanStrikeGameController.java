@@ -5,30 +5,25 @@ import com.assignment.clean_strike.util.InputUtil;
 import com.assignment.clean_strike.util.OutputUtil;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CleanStrikeGameController {
     private CarromBoardGameEntity carromBoardGameEntity;
     private TurnMenu turnMenu;
     private int turnState;
-    private InputUtil inputUtil;
-    private OutputUtil outputUtil;
 
-    //This constructor is used in the unit tests.
-    public CleanStrikeGameController(CarromBoardGameEntity carromBoardGameEntity, TurnMenu turnMenu, int turnState, InputUtil inputUtil, OutputUtil outputUtil) {
+    //This constructor is used in the Game Demo.
+    public CleanStrikeGameController(CarromBoardGameEntity carromBoardGameEntity) {
         this.carromBoardGameEntity = carromBoardGameEntity;
-        this.turnState = turnState;
-        this.inputUtil = inputUtil;
-        this.outputUtil = outputUtil;
-        this.turnMenu = turnMenu;
-    }
-
-    //This constructor is used in GameDemo and in some of the unit tests.
-    public CleanStrikeGameController(CarromBoardGameEntity carromBoardGameEntity, InputUtil inputUtil, OutputUtil outputUtil) {
-        this.carromBoardGameEntity = carromBoardGameEntity;
-        this.inputUtil = inputUtil;
-        this.outputUtil = outputUtil;
         this.turnState = 1;
         setupTurnMenu();
+    }
+
+    //This constructor is used in the unit tests.
+    public CleanStrikeGameController(CarromBoardGameEntity carromBoardGameEntity, TurnMenu turnMenu, int turnState) {
+        this.carromBoardGameEntity = carromBoardGameEntity;
+        this.turnMenu = turnMenu;
+        this.turnState = turnState;
     }
 
     private void setupTurnMenu() {
@@ -47,6 +42,8 @@ public class CleanStrikeGameController {
     }
 
     public boolean run() {
+        OutputUtil outputUtil = new OutputUtil();
+        InputUtil inputUtil = new InputUtil(new Scanner(System.in));
         outputUtil.display(String.format("\n %s :  Choose an outcome from the list below", carromBoardGameEntity.getPlayers().get(turnState - 1).getName()));
         turnMenu.displayMenu();
 

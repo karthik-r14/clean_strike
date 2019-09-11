@@ -15,8 +15,7 @@ public class GameDemo {
         CarromBoardGameEntity carromBoardGameEntity = new CarromBoardGameEntity(gameDetailsUtil.getNumberOfPlayersSelectedByUser(),
                 gameDetailsUtil.getPlayers());
 
-        CleanStrikeGameController cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity,
-                new InputUtil(new Scanner(System.in)), new OutputUtil());
+        CleanStrikeGameController cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity);
 
         cleanStrikeGameController.startGameMessage();
 
@@ -24,7 +23,7 @@ public class GameDemo {
         OutputUtil outputUtil = new OutputUtil();
         while (true) {
             boolean isGameOver = cleanStrikeGameController.run();
-            outputUtil.display("Press any key to continue...");
+            outputUtil.display("Press enter key to continue...");
             inputUtil.read();
 
             if (isGameOver) {

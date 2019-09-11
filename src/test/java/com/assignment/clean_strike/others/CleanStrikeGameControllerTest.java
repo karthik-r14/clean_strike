@@ -2,12 +2,12 @@ package com.assignment.clean_strike.others;
 
 import com.assignment.clean_strike.model.Player;
 import com.assignment.clean_strike.model.TurnMenu;
-import com.assignment.clean_strike.util.InputUtil;
-import com.assignment.clean_strike.util.OutputUtil;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
@@ -18,21 +18,17 @@ import static org.mockito.Mockito.*;
 public class CleanStrikeGameControllerTest {
     private CarromBoardGameEntity carromBoardGameEntity;
     private CleanStrikeGameController cleanStrikeGameController;
-    private InputUtil inputUtil;
-    private OutputUtil outputUtil;
     private final ByteArrayOutputStream outputContent = new ByteArrayOutputStream();
 
     @Before
-    public void setUp() throws Exception {
-        inputUtil = mock(InputUtil.class);
+    public void setUp() {
         carromBoardGameEntity = mock(CarromBoardGameEntity.class);
-        outputUtil = new OutputUtil();
         System.setOut(new PrintStream(outputContent));
     }
 
     @Test
     public void shouldShowStartGameMessage() {
-        cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity, inputUtil, outputUtil);
+        cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity);
         cleanStrikeGameController.startGameMessage();
         assertEquals("The game begins now!\n", outputContent.toString());
     }
@@ -50,9 +46,10 @@ public class CleanStrikeGameControllerTest {
         turnMenuList.add("1. Strike");
         TurnMenu turnMenu = new TurnMenu(turnMenuList);
 
-        cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity, turnMenu, turnState, inputUtil, outputUtil);
-
-        when(inputUtil.read()).thenReturn("1");
+        cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity, turnMenu, turnState);
+        String input = "1";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
         when(carromBoardGameEntity.getNumberOfPlayers()).thenReturn(numberOfPlayers);
         when(carromBoardGameEntity.getPlayers()).thenReturn(players);
@@ -77,10 +74,13 @@ public class CleanStrikeGameControllerTest {
         turnMenuList.add("1. Strike");
         TurnMenu turnMenu = new TurnMenu(turnMenuList);
 
-        cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity, turnMenu, turnState, inputUtil, outputUtil);
-        when(inputUtil.read()).thenReturn("1");
+        cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity, turnMenu, turnState);
         when(carromBoardGameEntity.getNumberOfPlayers()).thenReturn(numberOfPlayers);
         when(carromBoardGameEntity.getPlayers()).thenReturn(players);
+        String input = "1";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
 
         cleanStrikeGameController.run();
 
@@ -101,9 +101,11 @@ public class CleanStrikeGameControllerTest {
         turnMenuList.add("1. Strike");
         TurnMenu turnMenu = new TurnMenu(turnMenuList);
 
-        cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity, turnMenu, turnState, inputUtil, outputUtil);
-        when(inputUtil.read()).thenReturn("abc");
+        cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity, turnMenu, turnState);
         when(carromBoardGameEntity.getPlayers()).thenReturn(players);
+        String input = "abc";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
 
         boolean isGameOver = cleanStrikeGameController.run();
@@ -117,7 +119,7 @@ public class CleanStrikeGameControllerTest {
     }
 
     @Test
-    public void runGameShouldReturnFalseAndPrintMessageWhenANumberEnteredASTheChoiceIsNotPartOfTheChoiceList() {
+    public void runGameShouldReturnFalseAndPrintMessageWhenANumberEnteredAsTheChoiceIsNotPartOfTheChoiceList() {
         int numberOfPlayers = 2;
         int turnState = 1;
 
@@ -129,10 +131,12 @@ public class CleanStrikeGameControllerTest {
         turnMenuList.add("1. Strike");
         TurnMenu turnMenu = new TurnMenu(turnMenuList);
 
-        cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity, turnMenu, turnState, inputUtil, outputUtil);
-        when(inputUtil.read()).thenReturn("100");
+        cleanStrikeGameController = new CleanStrikeGameController(carromBoardGameEntity, turnMenu, turnState);
         when(carromBoardGameEntity.getNumberOfPlayers()).thenReturn(numberOfPlayers);
         when(carromBoardGameEntity.getPlayers()).thenReturn(players);
+        String input = "100";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
 
         boolean isGameOver = cleanStrikeGameController.run();
