@@ -4,7 +4,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
@@ -12,17 +14,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class GameDetailsUtilTest {
-    private InputUtil inputUtil;
-    private OutputUtil outputUtil;
-
     private GameDetailsUtil gameDetailsUtil;
     private final ByteArrayOutputStream outputContent = new ByteArrayOutputStream();
 
     @Before
     public void setUp() {
-        inputUtil = mock(InputUtil.class);
-        outputUtil = new OutputUtil();
-        gameDetailsUtil = new GameDetailsUtil(inputUtil, outputUtil);
+        gameDetailsUtil = new GameDetailsUtil();
         System.setOut(new PrintStream(outputContent));
     }
 
@@ -33,7 +30,9 @@ public class GameDetailsUtilTest {
 
     @Test
     public void shouldDisplayMainMenuAndUserInputsOptionAForSelectingTwoPlayers() {
-        when(inputUtil.read()).thenReturn("a");
+        String input = "a";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
         gameDetailsUtil.displayMainMenu();
 
@@ -45,7 +44,9 @@ public class GameDetailsUtilTest {
 
     @Test
     public void shouldDisplayMainMenuAndUserInputsOptionBForSelectingFourPlayers() {
-        when(inputUtil.read()).thenReturn("b");
+        String input = "b";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
         gameDetailsUtil.displayMainMenu();
 
@@ -57,7 +58,9 @@ public class GameDetailsUtilTest {
 
     @Test
     public void shouldDisplayMenuAndUserInputsAnythingThenTwoPlayersShouldBeSelected() {
-        when(inputUtil.read()).thenReturn("c");
+        String input = "c";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
         gameDetailsUtil.displayMainMenu();
 

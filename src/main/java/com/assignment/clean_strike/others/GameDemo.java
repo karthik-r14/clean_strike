@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class GameDemo {
 
     public static void main(String[] args) {
-        GameDetailsUtil gameDetailsUtil = new GameDetailsUtil(new InputUtil(new Scanner(System.in)), new OutputUtil());
+        GameDetailsUtil gameDetailsUtil = new GameDetailsUtil();
         gameDetailsUtil.displayMainMenu();
 
         CarromBoardGameEntity carromBoardGameEntity = new CarromBoardGameEntity(gameDetailsUtil.getNumberOfPlayersSelectedByUser(),
