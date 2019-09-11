@@ -12,7 +12,7 @@ public class GameDetailsUtil {
     public GameDetailsUtil() {
     }
 
-    public void displayMainMenu() {
+    public void interactWithUser() {
         OutputUtil outputUtil = new OutputUtil();
         outputUtil.display("Welcome to Clean Strike");
         outputUtil.display("Enter number of players (By default 2 players are selected). Enter\n 1. 'a' for 2 players\n 2. 'b' for 4 players");

@@ -10,7 +10,7 @@ public class GameDemo {
 
     public static void main(String[] args) {
         GameDetailsUtil gameDetailsUtil = new GameDetailsUtil();
-        gameDetailsUtil.displayMainMenu();
+        gameDetailsUtil.interactWithUser();
 
         CarromBoardGameEntity carromBoardGameEntity = new CarromBoardGameEntity(gameDetailsUtil.getNumberOfPlayersSelectedByUser(),
                 gameDetailsUtil.getPlayers());

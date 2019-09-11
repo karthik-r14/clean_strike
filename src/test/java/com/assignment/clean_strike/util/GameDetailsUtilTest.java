@@ -11,7 +11,6 @@ import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class GameDetailsUtilTest {
     private GameDetailsUtil gameDetailsUtil;
@@ -34,7 +33,7 @@ public class GameDetailsUtilTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        gameDetailsUtil.displayMainMenu();
+        gameDetailsUtil.interactWithUser();
 
         assertEquals("Welcome to Clean Strike\nEnter number of players (By default 2 players are selected). Enter\n" +
                 " 1. 'a' for 2 players\n" +
@@ -48,7 +47,7 @@ public class GameDetailsUtilTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        gameDetailsUtil.displayMainMenu();
+        gameDetailsUtil.interactWithUser();
 
         assertEquals("Welcome to Clean Strike\nEnter number of players (By default 2 players are selected). Enter\n" +
                 " 1. 'a' for 2 players\n" +
@@ -62,7 +61,7 @@ public class GameDetailsUtilTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        gameDetailsUtil.displayMainMenu();
+        gameDetailsUtil.interactWithUser();
 
         assertEquals("Welcome to Clean Strike\nEnter number of players (By default 2 players are selected). Enter\n" +
                 " 1. 'a' for 2 players\n" +
