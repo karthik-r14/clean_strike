@@ -50,20 +50,32 @@ public class CleanStrikeGameController {
         outputUtil.display(String.format("\n %s :  Choose an outcome from the list below", carromBoardGameEntity.getPlayers().get(turnState - 1).getName()));
         turnMenu.displayMenu();
 
-        outputUtil.display("Enter your choice from (1 to 8)");
-        int option = Integer.parseInt(inputUtil.read());
+        outputUtil.display("Enter your choice from (1 to " + turnMenu.getTurnMenuList().size() + ")");
+        int option = 0;
+
+        try {
+            option = Integer.parseInt(inputUtil.read());
+        } catch (NumberFormatException exception) {
+            outputUtil.display("Please enter a Number between 1 and " + turnMenu.getTurnMenuList().size() + " in your choice not a String.Please try again.");
+            return false;
+        }
 
         switch (carromBoardGameEntity.getNumberOfPlayers()) {
             case 2:
-                switch (turnState) {
-                    case 1:
-                        carromBoardGameEntity.updateGameState(1, turnMenu.getTurnMenuList().get(option - 1));
-                        turnState = 2;
-                        break;
-                    case 2:
-                        carromBoardGameEntity.updateGameState(2, turnMenu.getTurnMenuList().get(option - 1));
-                        turnState = 1;
-                        break;
+                try {
+                    switch (turnState) {
+                        case 1:
+                            carromBoardGameEntity.updateGameState(1, turnMenu.getTurnMenuList().get(option - 1));
+                            turnState = 2;
+                            break;
+                        case 2:
+                            carromBoardGameEntity.updateGameState(2, turnMenu.getTurnMenuList().get(option - 1));
+                            turnState = 1;
+                            break;
+                    }
+                } catch (IndexOutOfBoundsException exception) {
+                    outputUtil.display("Please enter a choice between 1 and " + turnMenu.getTurnMenuList().size() + " only.Please try again.");
+                    return false;
                 }
                 break;
         }
