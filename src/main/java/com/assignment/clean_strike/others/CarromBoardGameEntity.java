@@ -12,6 +12,7 @@ public class CarromBoardGameEntity {
     public static final int THRESHOLD_POINTS_TO_WIN = 5;
     private int numberOfPlayers;
     private ArrayList<Player> players;
+    private Player currentPlayer;
     private ArrayList<Coin> blackCoins;
     private Coin redCoin;
     private Coin striker;
@@ -60,8 +61,8 @@ public class CarromBoardGameEntity {
     public void updateGameState(int playerId, String option) {
         OutputUtil outputUtil = new OutputUtil();
         int playerIndex = playerId - 1;
-        Player player = players.get(playerIndex);
-        int points = player.getPoints();
+        currentPlayer = players.get(playerIndex);
+        int points = currentPlayer.getPoints();
 
         if ((allBlackCoinsArePocketed()) && (option.equals("1. Strike") || option.equals("2. Multi Strike (2 coins pocketed)") || option.equals("3. Multi Strike (3 coins pocketed)") || option.equals("4. Multi Strike (4 coins pocketed)"))) {
             outputUtil.display("All black coins are pocketed.Hence, strike cannot happen.");
@@ -70,86 +71,86 @@ public class CarromBoardGameEntity {
 
         switch (option) {
             case "1. Strike":
-                player.setPoints(points + 1);
-                removeBlackCoinsFromBoard(1);
-                player.setTimeLineOfTurn(player.getTimeLineOfTurn() + "P");
+                updatePlayerAndCoinStateInCaseOfBlackStrike(1, 1);
                 break;
 
             case "2. Multi Strike (2 coins pocketed)":
-                player.setPoints(points + 2);
-                removeBlackCoinsFromBoard(2);
-                player.setTimeLineOfTurn(player.getTimeLineOfTurn() + "P");
+                updatePlayerAndCoinStateInCaseOfBlackStrike(2, 2);
                 break;
 
             case "3. Multi Strike (3 coins pocketed)":
-                player.setPoints(points + 2);
-                removeBlackCoinsFromBoard(2);
-                player.setTimeLineOfTurn(player.getTimeLineOfTurn() + "P");
+                updatePlayerAndCoinStateInCaseOfBlackStrike(2, 2);
                 break;
 
             case "4. Multi Strike (4 coins pocketed)":
-                player.setPoints(points + 2);
-                removeBlackCoinsFromBoard(2);
-                player.setTimeLineOfTurn(player.getTimeLineOfTurn() + "P");
+                updatePlayerAndCoinStateInCaseOfBlackStrike(2, 2);
                 break;
 
             case "5. Red Strike":
                 if (redCoin.isOnBoard()) {
-                    player.setPoints(points + 3);
+                    updatePlayerStateInCaseOfStrike(3);
                     removeRedCoinFromBoard();
                     outputUtil.display("Red coin is now removed from the board & will not be in play from now on.");
-                    player.setTimeLineOfTurn(player.getTimeLineOfTurn() + "P");
+
                 } else {
                     outputUtil.display("Red coin is already pocketed.And is not in play");
                 }
                 break;
 
             case "6. Striker Strike":
-                player.incrementFouls();
-                player.setTimeLineOfTurn(player.getTimeLineOfTurn() + "N");
-                if (player.getFoulCount() >= 3) {
-                    player.setPoints(points - 1 - 1);
-                } else {
-                    player.setPoints(points - 1);
-                }
-
-                if (player.hasNotPocketedACoinForThreeStraightTurns()) {
-                    player.setPoints(player.getPoints() - 1);
-                }
-
-                outputUtil.display(player.getName() + " - " + "You have committed a foul.");
-                outputUtil.display("Your Foul Count = " + player.getFoulCount());
+                updatePlayerStateInCaseOfFoul(1);
+                displayFoulMessage();
 
                 break;
 
             case "7. Defunct Coin":
-                player.incrementFouls();
-                player.setTimeLineOfTurn(player.getTimeLineOfTurn() + "N");
-                if (player.getFoulCount() >= 3) {
-                    player.setPoints(points - 2 - 1);
-
-                } else {
-                    player.setPoints(points - 2);
-                }
-
-                if (player.hasNotPocketedACoinForThreeStraightTurns()) {
-                    player.setPoints(player.getPoints() - 1);
-                }
-                outputUtil.display(player.getName() + " - " + "You have committed a foul.");
-                outputUtil.display("Your Foul Count = " + player.getFoulCount());
+                updatePlayerStateInCaseOfFoul(2);
                 removeBlackCoinsFromBoard(1);
+                displayFoulMessage();
                 break;
 
             case "8. None":
-                player.setTimeLineOfTurn(player.getTimeLineOfTurn() + "N");
+                currentPlayer.setTimeLineOfTurn(currentPlayer.getTimeLineOfTurn() + "N");
 
-                if (player.hasNotPocketedACoinForThreeStraightTurns()) {
-                    player.setPoints(points - 1);
-                    player.incrementFouls();
-                    outputUtil.display(player.getName() + " - " + "You have committed a foul.");
-                    outputUtil.display("Your Foul Count = " + player.getFoulCount());
+                if (currentPlayer.hasNotPocketedACoinForThreeStraightTurns()) {
+                    currentPlayer.setPoints(points - 1);
+                    currentPlayer.incrementFouls();
+                    displayFoulMessage();
                 }
                 break;
+        }
+    }
+
+    private void displayFoulMessage() {
+        OutputUtil outputUtil = new OutputUtil();
+        outputUtil.display(currentPlayer.getName() + " - " + "You have committed a foul.");
+        outputUtil.display("Your Foul Count = " + currentPlayer.getFoulCount());
+    }
+
+    private void updatePlayerAndCoinStateInCaseOfBlackStrike(int pointsToBeIncremented, int numberOfBlackCoinsToBeRemovedFromBoard) {
+        updatePlayerStateInCaseOfStrike(pointsToBeIncremented);
+        removeBlackCoinsFromBoard(numberOfBlackCoinsToBeRemovedFromBoard);
+
+    }
+
+    private void updatePlayerStateInCaseOfStrike(int pointsToBeIncremented) {
+        currentPlayer.setPoints(currentPlayer.getPoints() + pointsToBeIncremented);
+        currentPlayer.setTimeLineOfTurn(currentPlayer.getTimeLineOfTurn() + "P");
+    }
+
+    private void updatePlayerStateInCaseOfFoul(int pointsToBeDecremented) {
+        int points = currentPlayer.getPoints();
+
+        currentPlayer.incrementFouls();
+        currentPlayer.setTimeLineOfTurn(currentPlayer.getTimeLineOfTurn() + "N");
+        if (currentPlayer.getFoulCount() >= 3) {
+            currentPlayer.setPoints(points - pointsToBeDecremented - 1);
+        } else {
+            currentPlayer.setPoints(points - pointsToBeDecremented);
+        }
+
+        if (currentPlayer.hasNotPocketedACoinForThreeStraightTurns()) {
+            currentPlayer.setPoints(currentPlayer.getPoints() - 1);
         }
     }
 
